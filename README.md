@@ -42,10 +42,8 @@ Install webpack
     npm install --save-dev webpack webpack-dev-middleware webpack-hot-middleware
 
 Webpack – bundler utility
-(explain webapck)
 
-This way, you don't have to worrying about proxy logic and you can easily integrate hot reloading into your existing express server without the need for webpack-dev-server
-configure weback
+Use webpack-dev-middleware and webpack-hot-middleware : - This way, we don't have to worrying about proxy logic and can easily integrate hot reloading into your existing express server without the need for webpack-dev-server
 
 Add webpack.config.js
 
