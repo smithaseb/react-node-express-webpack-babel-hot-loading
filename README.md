@@ -1,7 +1,9 @@
 # react-node-express-webpack-babel-hot-loading
-Base framework to develop a web application using react, node, express, webpack babel with hot module 
+Base framework/configuration to develop a web application using react, node, express, webpack babel with hot module 
 
 Prerequisite : Install Nodejs
+
+Steps to setup the configuration: 
 
 cd to your folder where you want your project to live and run:
 
