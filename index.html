@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>React-node-express-webpack-babel-hot-loading by smithaseb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">React-node-express-webpack-babel-hot-loading</h1>
+      <h2 class="project-tagline">Base framework to develop a web application using react, node, express, webpack babel with hot module loading</h2>
+      <a href="https://github.com/smithaseb/react-node-express-webpack-babel-hot-loading" class="btn">View on GitHub</a>
+      <a href="https://github.com/smithaseb/react-node-express-webpack-babel-hot-loading/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/smithaseb/react-node-express-webpack-babel-hot-loading/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="react-node-express-webpack-babel-hot-loading" class="anchor" href="#react-node-express-webpack-babel-hot-loading" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>react-node-express-webpack-babel-hot-loading</h1>
+
+<p>Base framework/configuration to develop a web application using react, node, express, webpack babel with hot module </p>
+
+<p>Prerequisite : Install Nodejs</p>
+
+<p>Steps to setup the configuration: </p>
+
+<p>cd to your folder where you want your project to live and run:</p>
+
+<pre><code>npm init –y 
+</code></pre>
+
+<p>This will nitiate your node project and create the package.json file.</p>
+
+<p>Install express </p>
+
+<pre><code>npm install express --save
+</code></pre>
+
+<p>Create server.js file and add the following to setup the server</p>
+
+<pre><code>var express = require('express');
+var path = require('path');
+var app = express();
+var port = 8080;
+app.get('*', function(req,res){
+   res.sendFile(path.join(__dirname,'app','index.html'));
+});
+app.listen(port,function(){
+    console.log('Listening to port' + port);
+});
+</code></pre>
+
+<p>Add app/index.html</p>
+
+<p>Run the express server </p>
+
+<pre><code>node server.js
+</code></pre>
+
+<p>and see whether the index.html is displayed by hitting </p>
+
+<pre><code>localhost:8080/
+</code></pre>
+
+<p>Install webpack</p>
+
+<pre><code>npm install --save-dev webpack webpack-dev-middleware webpack-hot-middleware
+</code></pre>
+
+<p>Webpack – bundler utility
+(explain webapck)</p>
+
+<p>This way, you don't have to worrying about proxy logic and you can easily integrate hot reloading into your existing express server without the need for webpack-dev-server
+configure weback</p>
+
+<p>Add webpack.config.js</p>
+
+<pre><code>var webpack = require('webpack');
+var path = require('path');
+module.exports = {
+entry: [
+    'webpack-hot-middleware/client', // This connects to the server to receive notifications when the bundle rebuilds and then updates your client bundle accordingly
+'./app/index.js' // entry point
+],
+output: {
+    path: __dirname,
+    publicPath: '/assets/', // destination directory
+    filename:'bundle.js'   // output file name
+},
+devtool: '#source-map',
+plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+],
+}
+</code></pre>
+
+<p>To make Webpack work with a Node backend, update server.js with the following: </p>
+
+<pre><code>var webpack = require('webpack');
+var webpackConfig = require('./webpack.config');
+var compiler = webpack(webpackConfig);
+app.use(require("webpack-dev-middleware")(compiler,{
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+}));
+</code></pre>
+
+<p>Live-Reload with Webpack</p>
+
+<p>With live reload, when you save a file, it automatically refreshes your browser. No need to press F5 anymore. Looks like a lazy developer tip, but it really increases your productivity, especially with dual-screen</p>
+
+<p>Add below line to server.js</p>
+
+<pre><code>app.use(require("webpack-hot-middleware")(compiler));
+</code></pre>
+
+<p>Add app/index.js</p>
+
+<pre><code>console.log('hello world!!!!!!!');
+</code></pre>
+
+<p>Run the application again and see the hot module reloading setup is complete</p>
+
+<p>See this in the browser console</p>
+
+<pre><code>hello world!!!!!!!
+[HMR] connected
+</code></pre>
+
+<p>Install babel (for version 6) components ( for ES6 /JSX converting)
+use Babel to transpile </p>
+
+<pre><code>npm install --save-dev babel-core babel-loader babel-plugin-react-transform babel-preset-es2015 babel-preset-react
+</code></pre>
+
+<p>Add .babelrc file</p>
+
+<pre><code>  "presets": ["react", "es2015"],
+  "env": {
+    "development": {
+      "plugins": [
+        ["react-transform", {
+          "transforms": [{
+            "transform": "react-transform-hmr",
+            "imports": ["react"],
+            "locals": ["module"]
+          }, {
+            "transform": "react-transform-catch-errors",
+            "imports": ["react", "redbox-react"]
+          }]
+        }]
+      ]
+    }
+  }
+}
+</code></pre>
+
+<p>Update webpack.config.js to load babel loader </p>
+
+<pre><code>module: {
+    loaders: [
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel',
+        }
+    ],
+},
+</code></pre>
+
+<p>Install React now</p>
+
+<pre><code>npm install --save react react-dom
+</code></pre>
+
+<p>Install react hot loader</p>
+
+<pre><code>npm install --save-dev react-transform-hmr react-transform-catch-errors redbox-react
+</code></pre>
+
+<p>Add your first react code  to index.js </p>
+
+<pre><code>import React from 'react';
+import ReactDOM from 'react-dom';
+class Hello extends React.Component {
+    render() {
+        return &lt;h1&gt;Hello World!!!!!!!!!!!!!!!!!!! &lt;/h1&gt;
+    }
+}
+ReactDOM.render(&lt;Hello/&gt;, document.getElementById('app'));
+</code></pre>
+
+<p>Make changes to your react component and see the magic happening on the browser..</p>
+
+<p>Happy coding in react……….</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/smithaseb/react-node-express-webpack-babel-hot-loading">React-node-express-webpack-babel-hot-loading</a> is maintained by <a href="https://github.com/smithaseb">smithaseb</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
