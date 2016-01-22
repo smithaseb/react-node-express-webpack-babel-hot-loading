@@ -135,4 +135,28 @@ Update webpack.config.js to load babel loader
         ],
     },
 
+Install React now
+
+    npm install --save react react-dom
+
+Install react hot loader
+
+    npm install --save-dev react-transform-hmr react-transform-catch-errors redbox-react
+
+
+Add your first react code  to index.js 
+
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    class Hello extends React.Component {
+        render() {
+            return <h1>Hello World!!!!!!!!!!!!!!!!!!! </h1>
+        }
+    }
+    ReactDOM.render(<Hello/>, document.getElementById('app'));
+
+
+Make changes to your react component and see the magic happening on the browser..
+
+Happy coding in react……….
 
